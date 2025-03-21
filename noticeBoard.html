@@ -16,15 +16,17 @@
     <div id="app">
       <h1>📌 게시판 목록</h1>
 
-      <ul v-for="(post,index) in posts" :key="post.no">
-        <li class="post-item" @click="selectPost(post)">
-          {{index+1}}.{{post.title}}
-        </li>
-        <i
-          class="fa-solid fa-trash-can trashcan"
-          @click="deletePost(index)"
-        ></i>
-      </ul>
+      <template v-for="(post,index) in posts" :key="post.no">
+        <ul>
+          <li class="post-item" @click="selectPost(post)">
+            {{index+1}}.{{post.title}}
+          </li>
+          <i
+            class="fa-solid fa-trash-can trashcan"
+            @click="deletePost(index)"
+          ></i>
+        </ul>
+      </template>
 
       <div v-if="selectedPost" class="post-content">
         <h2>{{selectedPost.title}}</h2>
@@ -35,9 +37,17 @@
       <button @click="addBtn">게시물 추가</button>
       <form v-if="formSwitch" v-on:submit="onSubmitForm">
         <label>제목 : </label>
-        <input type="text" v-model="newTitle" />
+        <input
+          type="text"
+          v-model="newTitle"
+          placeholder="제목을 입력하세요."
+        />
         <label>내용 : </label>
-        <input type="text" v-model="newContent" />
+        <input
+          type="text"
+          v-model="newContent"
+          placeholder="내용을 입력하세요."
+        />
         <button @click="addPost(newTitle,newContent)">등록</button>
       </form>
     </div>
@@ -127,6 +137,7 @@
 
           const deletePost = (index) => {
             posts.value.splice(index, 1);
+            closePost();
           };
 
           const formSwitch = ref(false);
@@ -139,7 +150,7 @@
 
           const addPost = (title, content) => {
             posts.value.push({
-              no: posts.length,
+              no: posts.length + 1,
               title: title,
               content: content,
             });
